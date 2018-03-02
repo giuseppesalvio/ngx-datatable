@@ -351,6 +351,17 @@ var DatatableComponent = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(DatatableComponent.prototype, "isVirtualized", {
+        /**
+         * CSS class applied to root element if
+         * virtualization is enabled.
+         */
+        get: function () {
+            return this.virtualization;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(DatatableComponent.prototype, "isHorScroll", {
         /**
          * CSS class applied to the root element
@@ -632,6 +643,12 @@ var DatatableComponent = /** @class */ (function () {
      */
     DatatableComponent.prototype.onBodyPage = function (_a) {
         var offset = _a.offset;
+        // Avoid pagination caming from body events like scroll when the table 
+        // has no virtualization and the external paging is enable. 
+        // This means, let's the developer handle pagination by my him(her) self
+        if (this.externalPaging && !this.virtualization) {
+            return;
+        }
         this.offset = offset;
         this.page.emit({
             count: this.count,
@@ -675,7 +692,8 @@ var DatatableComponent = /** @class */ (function () {
         // Keep the page size constant even if the row has been expanded.
         // This is because an expanded row is still considered to be a child of
         // the original row.  Hence calculation would use rowHeight only.
-        if (this.scrollbarV) {
+        //if (this.scrollbarV) {
+        if (this.scrollbarV && this.virtualization) {
             var size = Math.ceil(this.bodyHeight / this.rowHeight);
             return Math.max(size, 0);
         }
@@ -1005,6 +1023,11 @@ var DatatableComponent = /** @class */ (function () {
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [])
     ], DatatableComponent.prototype, "isVertScroll", null);
+    __decorate([
+        core_1.HostBinding('class.virtualized'),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [])
+    ], DatatableComponent.prototype, "isVirtualized", null);
     __decorate([
         core_1.HostBinding('class.scroll-horz'),
         __metadata("design:type", Boolean),

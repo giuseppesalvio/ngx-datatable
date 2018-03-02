@@ -127,6 +127,7 @@ var DataTableBodyComponent = /** @class */ (function () {
             return this._bodyHeight;
         },
         set: function (val) {
+            console.log("asdasd" + this.scrollbarV);
             if (this.scrollbarV) {
                 this._bodyHeight = val + 'px';
             }
@@ -155,7 +156,8 @@ var DataTableBodyComponent = /** @class */ (function () {
          * calculate scroll height automatically (as height will be undefined).
          */
         get: function () {
-            if (this.scrollbarV && this.rowCount) {
+            //if (this.scrollbarV && this.rowCount) {
+            if (this.scrollbarV && this.virtualization && this.rowCount) {
                 return this.rowHeightsCache.query(this.rowCount - 1);
             }
             // avoid TS7030: Not all code paths return a value.
@@ -169,6 +171,7 @@ var DataTableBodyComponent = /** @class */ (function () {
      */
     DataTableBodyComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log("oninit");
         if (this.rowDetail) {
             this.listener = this.rowDetail.toggle
                 .subscribe(function (_a) {
@@ -216,10 +219,14 @@ var DataTableBodyComponent = /** @class */ (function () {
         // scroller is missing on empty table
         if (!this.scroller)
             return;
-        if (this.scrollbarV && offset) {
+        //if (this.scrollbarV && offset) {
+        if (this.scrollbarV && this.virtualization && offset) {
             // First get the row Index that we need to move to.
             var rowIndex = this.pageSize * offset;
             offset = this.rowHeightsCache.query(rowIndex - 1);
+        }
+        else if (this.scrollbarV && !this.virtualization) {
+            offset = 0;
         }
         this.scroller.setOffset(offset || 0);
     };
@@ -365,7 +372,8 @@ var DataTableBodyComponent = /** @class */ (function () {
         if (this.groupedRows) {
             styles['width'] = this.columnGroupWidths.total;
         }
-        if (this.scrollbarV) {
+        //if (this.scrollbarV) {
+        if (this.scrollbarV && this.virtualization) {
             var idx = 0;
             if (this.groupedRows) {
                 // Get the latest row rowindex in a group
@@ -427,7 +435,8 @@ var DataTableBodyComponent = /** @class */ (function () {
      * when the entire row array state has changed.
      */
     DataTableBodyComponent.prototype.refreshRowHeightCache = function () {
-        if (!this.scrollbarV)
+        //if (!this.scrollbarV) return;
+        if (!this.scrollbarV || (this.scrollbarV && !this.virtualization))
             return;
         // clear the previous row height cache if already present.
         // this is useful during sorts, filters where the state of the
@@ -454,7 +463,8 @@ var DataTableBodyComponent = /** @class */ (function () {
         // If the scroll bar is just below the row which is highlighted then make that as the
         // first index.
         var viewPortFirstRowIndex = this.indexes.first;
-        if (this.scrollbarV) {
+        //if (this.scrollbarV) {
+        if (this.scrollbarV && this.virtualization) {
             var offsetScroll = this.rowHeightsCache.query(viewPortFirstRowIndex - 1);
             return offsetScroll <= this.offsetY ? viewPortFirstRowIndex - 1 : viewPortFirstRowIndex;
         }
@@ -471,7 +481,8 @@ var DataTableBodyComponent = /** @class */ (function () {
         var viewPortFirstRowIndex = this.getAdjustedViewPortIndex();
         var expanded = this.rowExpansions.get(row);
         // If the detailRowHeight is auto --> only in case of non-virtualized scroll
-        if (this.scrollbarV) {
+        //if (this.scrollbarV) {
+        if (this.scrollbarV && this.virtualization) {
             var detailRowHeight = this.getDetailRowHeight(row) * (expanded ? -1 : 1);
             // const idx = this.rowIndexes.get(row) || 0;
             var idx = this.getRowIndex(row);

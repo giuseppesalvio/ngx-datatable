@@ -41,9 +41,11 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box; }
   .ngx-datatable.scroll-vertical .datatable-body {
-    overflow-y: auto; }
-    .ngx-datatable.scroll-vertical .datatable-body .datatable-row-wrapper {
-      position: absolute; }
+    overflow-y: auto;
+    /*      .datatable-row-wrapper {
+        position: absolute;*/ }
+  .ngx-datatable.scroll-vertical.virtualized .datatable-body .datatable-row-wrapper {
+    position: absolute; }
   .ngx-datatable.scroll-horz .datatable-body {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch; }

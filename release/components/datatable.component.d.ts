@@ -264,6 +264,11 @@ export declare class DatatableComponent implements OnInit, DoCheck, AfterViewIni
      */
     readonly isVertScroll: boolean;
     /**
+     * CSS class applied to root element if
+     * virtualization is enabled.
+     */
+    readonly isVirtualized: boolean;
+    /**
      * CSS class applied to the root element
      * if the horziontal scrolling is enabled.
      */
