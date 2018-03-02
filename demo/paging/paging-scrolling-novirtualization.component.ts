@@ -5,7 +5,7 @@ import {CorporateEmployee} from "./model/corporate-employee";
 import {Page} from "./model/page";
 
 @Component({
-  selector: 'server-paging-demo',
+  selector: 'paging-scrolling-novirtualization-demo',
   providers: [
       MockServerResultsService
   ],
@@ -38,7 +38,7 @@ import {Page} from "./model/page";
     </div>
   `
 })
-export class ServerPagingComponent {
+export class PagingScrollingNoVirtualizationComponent {
 
   page = new Page();
   rows = new Array<CorporateEmployee>();

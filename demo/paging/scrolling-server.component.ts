@@ -97,7 +97,10 @@ export class ServerScrollingComponent {
     this.isLoading = true;
 
     this.serverResultsService.getResults(this.rows.length, limit).subscribe(results => {
-      this.rows.push(...results.data);
+//      this.rows.push(...results.data);
+      let rows = [...this.rows, ...results.data];
+       this.rows = rows;
+
       this.isLoading = false;
     });
   }
